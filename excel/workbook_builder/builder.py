@@ -34,7 +34,7 @@ _GRID: dict[str, Callable[[ModelSpec, SourceDatabase], SheetBuilder]] = {
     "Ratios": model_ratios.build_ratios,
 }
 
-_CUSTOM = {"Cover", "Sources", "Valuation", "Sensitivities", "Checks"}
+_CUSTOM = {"Cover", "Sources", "Reported Financials", "Valuation", "Sensitivities", "Checks"}
 
 
 class WorkbookBuilder:
@@ -72,6 +72,8 @@ class WorkbookBuilder:
                 meta.fill_cover(ws, self.registry, spec, self.db, self.build_date)
             elif name == "Sources":
                 meta.fill_sources(ws, self.registry, spec, self.db)
+            elif name == "Reported Financials":
+                meta.fill_reported(ws, self.registry, spec, self.db)
             elif name == "Valuation":
                 valuation.fill_valuation(ws, self.registry, spec, self.db)
             elif name == "Sensitivities":

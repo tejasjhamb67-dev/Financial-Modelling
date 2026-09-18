@@ -125,8 +125,8 @@ def build_spec(db: SourceDatabase, disclosure: DisclosureMap) -> ModelSpec:
     if vcfg.get("build_sotp_if_segments", True) and disclosure.has_segments:
         valuation.append("SOTP")
 
-    # sheet order
-    sheets = ["Cover", "Sources", "Assumptions"]
+    # sheet order (Reported Financials = verbatim as-reported dump, before Assumptions)
+    sheets = ["Cover", "Sources", "Reported Financials", "Assumptions"]
     if "Revenue Build" in schedules:
         sheets.append("Revenue Build")
     if "Operating Drivers" in schedules:

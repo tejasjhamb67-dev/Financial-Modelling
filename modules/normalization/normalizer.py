@@ -47,6 +47,8 @@ def normalize(db: SourceDatabase) -> SourceDatabase:
     out = SourceDatabase(db.company)
     out.documents = copy.deepcopy(db.documents)
     out.restatements = copy.deepcopy(db.restatements)
+    # Preserve the verbatim as-reported layer unchanged (it is the RAW record).
+    out.reported_statements = copy.deepcopy(db.reported_statements)
 
     for dp in db.datapoints:
         ndp = copy.deepcopy(dp)

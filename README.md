@@ -25,6 +25,12 @@ A genuine `.xlsx` workbook (not a PDF-to-Excel dump) containing:
   and a highlighted *"analyst review required"* list.
 - **Sources** — full provenance for every extracted datapoint and a document
   inventory (what / when / where / how / why for each number).
+- **Reported Financials** — the raw historical statements dumped verbatim, exactly
+  as disclosed in the source documents (no mapping, construction or forecast), in
+  one sheet. This is the undistorted RAW layer, placed right before Assumptions so
+  the analyst can always see the untouched data the model was built from. Supply a
+  `reported_statements` block in the package for a line-perfect dump; otherwise the
+  sheet falls back to the source database grouped by statement.
 - **Assumptions** — the analyst's control panel; every forecast is driven by a
   yellow input cell here (seeded with neutral hold-last-actual placeholders).
 - **Revenue Build** — segment build with explicit additive totals and mix %.

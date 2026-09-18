@@ -62,12 +62,12 @@ provenance:
   short_term_debt:
     document: Consolidated Financial Statements FY2025-26
     page: 9
-    section: Mapped = Current Borrowings + Current Lease Liab + Current Deferred Payment
+    section: Mapped = Current Borrowings + Current Lease + Current Deferred Payment
       Liab
   long_term_debt:
     document: Consolidated Financial Statements FY2025-26
     page: 9
-    section: Mapped = Non-current Borrowings + Lease Liab + Deferred Payment Liab
+    section: Mapped = Non-current Borrowings + Lease + Deferred Payment Liab
   intangibles:
     document: Consolidated Financial Statements FY2025-26
     page: 9
@@ -216,3 +216,596 @@ cash_flow:
     FY26: 34255
   opening_cash:
     FY23: 568
+reported_statements:
+- name: Consolidated Statement of Profit and Loss (figures as reported)
+  document: Consolidated Financial Statements FY24 / FY25 / FY26
+  pages:
+  - 11
+  - 10
+  - 10
+  unit: INR crore
+  lines:
+  - label: Revenue from Operations
+    note: 26
+    values:
+      FY23: 98099
+      FY24: 109558
+      FY25: 128218
+      FY26: 146885
+  - label: Other Income
+    note: 27
+    values:
+      FY23: 590
+      FY24: 617
+      FY25: 1115
+      FY26: 2874
+  - label: Total Income
+    bold: true
+    values:
+      FY23: 98689
+      FY24: 110175
+      FY25: 129333
+      FY26: 149759
+  - label: Expenses
+    section: true
+  - label: Network Operating Expenses
+    note: 28
+    indent: 1
+    values:
+      FY23: 28333
+      FY24: 30338
+      FY25: 33355
+      FY26: 34492
+  - label: Access Charges
+    indent: 1
+    values:
+      FY23: 881
+      FY24: 1066
+      FY25: 1281
+      FY26: 1637
+  - label: License Fees / Spectrum Charges
+    indent: 1
+    values:
+      FY23: 9132
+      FY24: 9213
+      FY25: 10495
+      FY26: 11710
+  - label: Employee Benefits Expense
+    note: 29
+    indent: 1
+    values:
+      FY23: 4445
+      FY24: 5382
+      FY25: 6208
+      FY26: 6649
+  - label: Finance Costs
+    note: 30
+    indent: 1
+    values:
+      FY23: 4082
+      FY24: 4048
+      FY25: 4905
+      FY26: 8653
+  - label: Depreciation and Amortisation Expense
+    note: 1
+    indent: 1
+    values:
+      FY23: 18964
+      FY24: 22103
+      FY25: 24138
+      FY26: 27249
+  - label: Selling and Distribution Expenses
+    note: 31
+    indent: 1
+    values:
+      FY23: 1892
+      FY24: 2545
+      FY25: 3695
+      FY26: 4565
+  - label: Other Expenses
+    note: 32
+    indent: 1
+    values:
+      FY23: 5285
+      FY24: 6672
+      FY25: 10129
+      FY26: 14451
+  - label: Total Expenses
+    bold: true
+    values:
+      FY23: 73014
+      FY24: 81367
+      FY25: 94206
+      FY26: 109406
+  - label: Profit Before Share of Assoc./JV and Tax
+    bold: true
+    values:
+      FY23: 25675
+      FY24: 28808
+      FY25: 35127
+      FY26: 40353
+  - label: Share of Profit / (Loss) of Associate and JV
+    values:
+      FY23: -5
+      FY24: -11
+      FY25: -11
+      FY26: -4
+  - label: Current Tax
+    note: 33
+    indent: 1
+    values:
+      FY23: 65
+      FY24: 70
+      FY25: 84
+      FY26: 118
+  - label: Deferred Tax
+    note: 33
+    indent: 1
+    values:
+      FY23: 6481
+      FY24: 7304
+      FY25: 8923
+      FY26: 10182
+  - label: Profit for the Year
+    bold: true
+    values:
+      FY23: 19124
+      FY24: 21423
+      FY25: 26109
+      FY26: 30049
+  - label: Basic EPS (Rupees, face value INR 10)
+    note: 34
+    values:
+      FY23: 21.4
+      FY24: 23.96
+      FY25: 29.21
+      FY26: 33.63
+- name: Consolidated Balance Sheet (figures as reported)
+  document: Consolidated Financial Statements FY24 / FY25 / FY26
+  pages:
+  - 10
+  - 9
+  - 9
+  unit: INR crore
+  lines:
+  - label: Non-Current Assets
+    section: true
+  - label: Property, Plant and Equipment
+    note: 1
+    indent: 1
+    values:
+      FY23: 146923
+      FY24: 148874
+      FY25: 187271
+      FY26: 250992
+  - label: Spectrum
+    note: 1
+    indent: 1
+    values:
+      FY23: 75339
+      FY24: 69852
+      FY25: 147122
+      FY26: 188120
+  - label: Other Intangible Assets
+    note: 1
+    indent: 1
+    values:
+      FY23: 5722
+      FY24: 12342
+      FY25: 20541
+      FY26: 33797
+  - label: Goodwill
+    note: 2
+    indent: 1
+    values:
+      FY23: 5543
+      FY24: 6088
+      FY25: 6098
+      FY26: 6079
+  - label: Capital Work-in-Progress
+    note: 1
+    indent: 1
+    values:
+      FY23: 46688
+      FY24: 81177
+      FY25: 60329
+      FY26: 14467
+  - label: Spectrum Under Development
+    note: 1
+    indent: 1
+    values:
+      FY23: 122357
+      FY24: 129602
+      FY25: 54176
+      FY26: 8611
+  - label: Other Intangible Assets Under Development
+    note: 1
+    indent: 1
+    values:
+      FY23: 28285
+      FY24: 24365
+      FY25: 17716
+      FY26: 6828
+  - label: Investments (Non-Current)
+    note: 3
+    indent: 1
+    values:
+      FY23: 2320
+      FY24: 2617
+      FY25: 2889
+      FY26: 3775
+  - label: Other Financial Assets (Non-Current)
+    note: 4
+    indent: 1
+    values:
+      FY23: 8
+      FY24: 10
+      FY25: 53
+      FY26: 114
+  - label: Deferred Tax Assets (Net)
+    note: 5
+    indent: 1
+    values:
+      FY23: 63
+      FY24: 51
+      FY25: 41
+      FY26: 53
+  - label: Other Non-Current Assets
+    note: 6
+    indent: 1
+    values:
+      FY23: 24419
+      FY24: 26363
+      FY25: 29085
+      FY26: 30001
+  - label: Total Non-Current Assets
+    bold: true
+    values:
+      FY23: 457667
+      FY24: 501341
+      FY25: 525321
+      FY26: 542837
+  - label: Current Assets
+    section: true
+  - label: Inventories
+    note: 7
+    indent: 1
+    values:
+      FY23: 63
+      FY24: 119
+      FY25: 227
+      FY26: 263
+  - label: Investments (Current)
+    note: 8
+    indent: 1
+    values:
+      FY23: 4450
+      FY24: 3420
+      FY25: 19775
+      FY26: 26645
+  - label: Trade Receivables
+    note: 9
+    indent: 1
+    values:
+      FY23: 3251
+      FY24: 2851
+      FY25: 2461
+      FY26: 2527
+  - label: Cash and Cash Equivalents
+    note: 10
+    indent: 1
+    values:
+      FY23: 1032
+      FY24: 2489
+      FY25: 8012
+      FY26: 16557
+  - label: Other Bank Balances
+    note: 11
+    indent: 1
+    values:
+      FY23: 411
+      FY24: 422
+      FY25: 412
+      FY26: 390
+  - label: Other Financial Assets (Current)
+    note: 12
+    indent: 1
+    values:
+      FY23: 4095
+      FY24: 1991
+      FY25: 2990
+      FY26: 7182
+  - label: Other Current Assets
+    note: 13
+    indent: 1
+    values:
+      FY23: 22937
+      FY24: 26947
+      FY25: 22036
+      FY26: 19193
+  - label: Total Current Assets
+    bold: true
+    values:
+      FY23: 36239
+      FY24: 38239
+      FY25: 55913
+      FY26: 72757
+  - label: Total Assets
+    bold: true
+    values:
+      FY23: 493906
+      FY24: 539580
+      FY25: 581234
+      FY26: 615594
+  - label: Equity
+    section: true
+  - label: Equity Share Capital
+    note: 14
+    indent: 1
+    values:
+      FY23: 8939
+      FY24: 8939
+      FY25: 8939
+      FY26: 8939
+  - label: Other Equity
+    note: 15
+    indent: 1
+    values:
+      FY23: 247619
+      FY24: 269347
+      FY25: 296108
+      FY26: 327038
+  - label: Non-Controlling Interest
+    indent: 1
+    values:
+      FY23: 1121
+      FY24: 1135
+      FY25: 1134
+      FY26: 1099
+  - label: Non-Current Liabilities
+    section: true
+  - label: Borrowings (Non-Current)
+    note: 16
+    indent: 1
+    values:
+      FY23: 23313
+      FY24: 43183
+      FY25: 45229
+      FY26: 51455
+  - label: Lease Liabilities (Non-Current)
+    indent: 1
+    values:
+      FY23: 10414
+      FY24: 9536
+      FY25: 8813
+      FY26: 7562
+  - label: Deferred Payment Liabilities (Non-Current)
+    note: 17
+    indent: 1
+    values:
+      FY23: 112844
+      FY24: 108270
+      FY25: 104410
+      FY26: 99552
+  - label: Other Financial Liabilities (Non-Current)
+    note: 18
+    indent: 1
+    values:
+      FY23: 5091
+      FY24: 4462
+      FY25: 5156
+      FY26: 8711
+  - label: Provisions (Non-Current)
+    note: 19
+    indent: 1
+    values:
+      FY23: 127
+      FY24: 131
+      FY25: 265
+      FY26: 248
+  - label: Deferred Tax Liabilities (Net)
+    note: 5
+    indent: 1
+    values:
+      FY23: 14519
+      FY24: 21885
+      FY25: 30865
+      FY26: 41210
+  - label: Other Non-Current Liabilities
+    note: 20
+    indent: 1
+    values:
+      FY23: 790
+      FY24: 1474
+      FY25: 2214
+      FY26: 2599
+  - label: Total Non-Current Liabilities
+    bold: true
+    values:
+      FY23: 167098
+      FY24: 188941
+      FY25: 196952
+      FY26: 211337
+  - label: Current Liabilities
+    section: true
+  - label: Borrowings (Current)
+    note: 21
+    indent: 1
+    values:
+      FY23: 13489
+      FY24: 11166
+      FY25: 27831
+      FY26: 19326
+  - label: Lease Liabilities (Current)
+    indent: 1
+    values:
+      FY23: 3428
+      FY24: 3226
+      FY25: 3823
+      FY26: 6326
+  - label: Trade Payables
+    note: 22
+    indent: 1
+    values:
+      FY23: 5138
+      FY24: 6443
+      FY25: 7656
+      FY26: 8932
+  - label: Deferred Payment Liabilities (Current)
+    note: 17
+    indent: 1
+    values:
+      FY23: 4423
+      FY24: 4574
+      FY25: 4736
+      FY26: 4962
+  - label: Other Financial Liabilities (Current)
+    note: 23
+    indent: 1
+    values:
+      FY23: 32043
+      FY24: 32417
+      FY25: 18346
+      FY26: 11628
+  - label: Other Current Liabilities
+    note: 24
+    indent: 1
+    values:
+      FY23: 10313
+      FY24: 13089
+      FY25: 15438
+      FY26: 15743
+  - label: Provisions (Current)
+    note: 25
+    indent: 1
+    values:
+      FY23: 295
+      FY24: 303
+      FY25: 271
+      FY26: 264
+  - label: Total Current Liabilities
+    bold: true
+    values:
+      FY23: 69129
+      FY24: 71218
+      FY25: 78101
+      FY26: 67181
+  - label: Total Liabilities
+    bold: true
+    values:
+      FY23: 236227
+      FY24: 260159
+      FY25: 275053
+      FY26: 278518
+- name: Consolidated Statement of Cash Flows (figures as reported)
+  document: Consolidated Financial Statements FY24 / FY25 / FY26
+  pages:
+  - 13
+  - 12
+  - 13
+  unit: INR crore
+  lines:
+  - label: A. Cash Flow from Operating Activities
+    section: true
+  - label: Profit Before Tax (per Statement of P&L)
+    indent: 1
+    values:
+      FY23: 25670
+      FY24: 28797
+      FY25: 35116
+      FY26: 40353
+  - label: Depreciation and Amortisation Expense
+    indent: 1
+    values:
+      FY23: 18964
+      FY24: 22103
+      FY25: 24138
+      FY26: 27249
+  - label: Finance Costs
+    indent: 1
+    values:
+      FY23: 4082
+      FY24: 4048
+      FY25: 4905
+      FY26: 8653
+  - label: Interest Income
+    indent: 1
+    values:
+      FY23: -12
+      FY24: -60
+      FY25: -860
+      FY26: -2197
+  - label: Operating Profit before Working Capital Changes
+    bold: true
+    values:
+      FY23: 48450
+      FY24: 54414
+      FY25: 63203
+      FY26: 73638
+  - label: Cash Generated from Operations
+    indent: 1
+    values:
+      FY23: 49220
+      FY24: 57829
+      FY25: 68268
+      FY26: 77846
+  - label: Tax Refund / (Paid) (Net)
+    indent: 1
+    values:
+      FY23: 1268
+      FY24: -167
+      FY25: -112
+      FY26: -290
+  - label: Net Cash Flow from Operating Activities (A)
+    bold: true
+    values:
+      FY23: 50488
+      FY24: 57662
+      FY25: 68156
+      FY26: 77556
+  - label: B. Cash Flow from Investing Activities
+    section: true
+  - label: Expenditure for PP&E, Spectrum and Intangibles (Capex)
+    indent: 1
+    values:
+      FY23: -38354
+      FY24: -53607
+      FY25: -44349
+      FY26: -34255
+  - label: Net Cash Flow (used in) Investing Activities (B)
+    bold: true
+    values:
+      FY23: -36037
+      FY24: -56588
+      FY25: -63726
+      FY26: -43591
+  - label: C. Cash Flow from Financing Activities
+    section: true
+  - label: Net Cash Flow from / (used in) Financing Activities (C)
+    bold: true
+    values:
+      FY23: -13987
+      FY24: 379
+      FY25: 1093
+      FY26: -25419
+  - label: Net Increase in Cash and Cash Equivalents (A+B+C)
+    bold: true
+    values:
+      FY23: 464
+      FY24: 1453
+      FY25: 5523
+      FY26: 8546
+  - label: Opening Balance of Cash and Cash Equivalents
+    indent: 1
+    values:
+      FY23: 568
+      FY24: 1032
+      FY25: 2489
+      FY26: 8012
+  - label: Closing Balance of Cash and Cash Equivalents
+    bold: true
+    values:
+      FY23: 1032
+      FY24: 2489
+      FY25: 8012
+      FY26: 16557

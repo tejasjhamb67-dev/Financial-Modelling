@@ -82,6 +82,15 @@ def test_full_pipeline_produces_workbook(tmp_path):
     assert result.qc_result.passed
 
 
+def test_reported_financials_sheet(tmp_path):
+    from openpyxl import load_workbook
+    result = run(package=PKG, output_dir=str(tmp_path))
+    wb = load_workbook(result.workbook_path)
+    assert "Reported Financials" in wb.sheetnames
+    # must sit right before Assumptions (verbatim raw layer)
+    assert wb.sheetnames.index("Reported Financials") < wb.sheetnames.index("Assumptions")
+
+
 def test_source_db_roundtrip(tmp_path, db):
     p = str(tmp_path / "reg.json")
     db.save(p)

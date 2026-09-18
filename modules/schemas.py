@@ -196,6 +196,11 @@ class SourceDatabase:
         self.documents: list[Document] = []
         self.datapoints: list[DataPoint] = []
         self.restatements: list[Restatement] = []
+        # Verbatim "as-reported" statement blocks preserved exactly as disclosed
+        # (the RAW layer, surfaced undistorted on the Reported Financials sheet).
+        # Each block: {name, document, pages, lines:[{label, note, bold, indent,
+        # values:{period: value}}]}
+        self.reported_statements: list[dict] = []
 
     # -- mutation --------------------------------------------------------
     def add_document(self, doc: Document) -> None:
@@ -258,6 +263,7 @@ class SourceDatabase:
             "documents": [d.to_dict() for d in self.documents],
             "datapoints": [dp.to_dict() for dp in self.datapoints],
             "restatements": [r.to_dict() for r in self.restatements],
+            "reported_statements": self.reported_statements,
         }
 
     def save(self, path: str) -> None:
@@ -277,6 +283,7 @@ class SourceDatabase:
             db.datapoints.append(DataPoint.from_dict(dp))
         for r in d.get("restatements", []):
             db.restatements.append(Restatement(**r))
+        db.reported_statements = d.get("reported_statements", []) or []
         return db
 
     # -- summary counts (for human-in-the-loop review) -------------------

@@ -141,6 +141,32 @@ def build_database(pkg: dict[str, Any]) -> SourceDatabase:
                 )
                 db.add(dp)
 
+    # -- verbatim as-reported statement blocks (RAW layer) ---------------
+    for block in pkg.get("reported_statements", []) or []:
+        norm_lines = []
+        for line in block.get("lines", []) or []:
+            meta_keys = {"label", "note", "bold", "indent", "section", "values"}
+            values = dict(line.get("values", {}))
+            for k, v in line.items():
+                if k not in meta_keys:
+                    values[k] = v  # allow inline period keys (FY24: 123)
+            norm_lines.append({
+                "label": line.get("label", ""),
+                "note": line.get("note"),
+                "bold": bool(line.get("bold", False)),
+                "indent": int(line.get("indent", 0)),
+                "section": bool(line.get("section", False)),
+                "values": {p: _num(x) for p, x in values.items()},
+                "raw_values": values,
+            })
+        db.reported_statements.append({
+            "name": block.get("name", "Reported statement"),
+            "document": block.get("document", default_doc),
+            "pages": block.get("pages", []) or [],
+            "unit": block.get("unit", unit),
+            "lines": norm_lines,
+        })
+
     # -- restatements ----------------------------------------------------
     for r in pkg.get("restatements", []) or []:
         old_v, new_v = _num(r.get("old_value")), _num(r.get("new_value"))

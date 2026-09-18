@@ -149,6 +149,123 @@ def fill_sources(ws, registry, spec: ModelSpec, db: SourceDatabase) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Reported Financials (verbatim, as-extracted, undistorted)
+# ---------------------------------------------------------------------------
+
+def fill_reported(ws, registry, spec: ModelSpec, db: SourceDatabase) -> None:
+    """As-reported dump: the raw historical statements exactly as disclosed in
+    the source documents, in one sheet, with NO mapping, construction or
+    forecasting. Every number is a blue reported input with its source noted.
+    This is the RAW layer, surfaced so the analyst can see the untouched data
+    the model was built from.
+    """
+    cs = CustomSheet(ws, registry, "Reported Financials")
+    periods = spec.historical_periods
+    cs.title("Reported Financials - As Extracted (Undistorted)", span=2 + len(periods))
+    cs.subtitle("Verbatim from the source documents - no mapping, no construction, no forecast. "
+                "Blue = reported. Figures are exactly as disclosed.")
+    cs.width(1, 52)
+    col_of = {}
+    for i, p in enumerate(periods):
+        col = 2 + i
+        col_of[p] = col
+        cs.width(col, 15)
+
+    blocks = db.reported_statements or _fallback_blocks(spec, db)
+    row = 4
+    for block in blocks:
+        meta_line = block.get("name", "Reported statement")
+        doc = block.get("document")
+        pages = block.get("pages") or []
+        src = f"   [{doc}" + (f", p.{','.join(str(x) for x in pages)}" if pages else "") + "]" if doc else ""
+        cs.section(row, meta_line + src, span=2 + len(periods))
+        row += 1
+        # period header
+        unit = block.get("unit") or spec.unit or ""
+        cs.label(row, 1, unit, color=styles._C["subtle_grey"])
+        for p in periods:
+            c = ws.cell(row=row, column=col_of[p], value=p)
+            c.font = styles.section_font()
+            c.alignment = styles.CENTER
+            c.border = styles.BORDER_BOTTOM
+        row += 1
+        for line in block.get("lines", []):
+            label = ("    " * int(line.get("indent", 0))) + str(line.get("label", ""))
+            note = line.get("note")
+            if note not in (None, ""):
+                label = f"{label}  (Note {note})"
+            bold = bool(line.get("bold", False))
+            if line.get("section"):
+                cs.label(row, 1, str(line.get("label", "")), bold=True, color=styles._C["header_navy"])
+                row += 1
+                continue
+            cs.label(row, 1, label, bold=bold)
+            values = line.get("values", {})
+            for p in periods:
+                v = values.get(p)
+                col = col_of[p]
+                if v is None:
+                    cell = ws.cell(row=row, column=col, value="Not Found" if p in values else None)
+                    if p in values:
+                        cell.font = styles.error_font()
+                        cell.alignment = styles.RIGHT
+                else:
+                    comment = f"{meta_line}\nSource: {doc or 'source document'}"
+                    if pages:
+                        comment += f", p.{','.join(str(x) for x in pages)}"
+                    cs.put(row, col, v, DataType.REPORTED, number_format=styles.NF_CURRENCY,
+                           comment=comment, bold=bold)
+            row += 1
+        row += 1  # blank line between statements
+
+    if not blocks:
+        cs.label(5, 1, "No structured reported-statement block was supplied for this company.")
+    ws.freeze_panes = f"{get_column_letter(2)}4"
+
+
+def _fallback_blocks(spec: ModelSpec, db: SourceDatabase) -> list[dict]:
+    """When no verbatim block is supplied, dump the source database grouped by
+    statement so the sheet is still an honest as-extracted view."""
+    from modules.config_loader import AccountingTaxonomy
+    tax = AccountingTaxonomy()
+    mapping = [("Income Statement (as extracted)", "income_statement", Statement.INCOME_STATEMENT),
+               ("Balance Sheet (as extracted)", "balance_sheet", Statement.BALANCE_SHEET),
+               ("Cash Flow (as extracted)", "cash_flow", Statement.CASH_FLOW)]
+    blocks = []
+    for name, key, stmt in mapping:
+        present = {dp.metric for dp in db.by_statement(stmt) if dp.value is not None}
+        lines = []
+        for metric in tax.order(key):
+            if metric not in present:
+                continue
+            values = {p: db.value(metric, p, _CONSOL) for p in spec.historical_periods}
+            if all(v is None for v in values.values()):
+                continue
+            lines.append({"label": tax.label(key, metric), "values": values,
+                          "bold": metric.startswith("total") or metric in ("ebitda", "ebit", "pat")})
+        if lines:
+            doc = db.documents[-1].name if db.documents else None
+            blocks.append({"name": name, "document": doc, "pages": [], "lines": lines})
+    # operating drivers / segments
+    for name, stmt in [("Operating Drivers (as extracted)", Statement.OPERATING),
+                       ("Segments (as extracted)", Statement.SEGMENT)]:
+        dps = [dp for dp in db.by_statement(stmt)]
+        seen = []
+        lines = []
+        for dp in dps:
+            if dp.metric in seen:
+                continue
+            seen.append(dp.metric)
+            values = {p: db.value(dp.metric, p) for p in spec.historical_periods}
+            if all(v is None for v in values.values()):
+                continue
+            lines.append({"label": dp.label or dp.metric, "values": values})
+        if lines:
+            blocks.append({"name": name, "document": None, "pages": [], "lines": lines})
+    return blocks
+
+
+# ---------------------------------------------------------------------------
 # Checks
 # ---------------------------------------------------------------------------
 
