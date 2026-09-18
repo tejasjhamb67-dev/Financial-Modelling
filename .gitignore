@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.DS_Store
+
+# Generated artifacts (keep folder structure via .gitkeep)
+outputs/models/*
+data/raw/*
+data/extracted/*
+data/normalized/*
+data/validated/*
+sources/source_registry/*
+inputs/documents/*
+!**/.gitkeep

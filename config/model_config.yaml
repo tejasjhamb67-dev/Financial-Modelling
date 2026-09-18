@@ -1,0 +1,49 @@
+# Model construction configuration.
+# These are STRUCTURAL defaults, not company assumptions. The analyst still
+# owns every forecast assumption inside the generated workbook.
+
+model:
+  forecast_years: 3            # NON-NEGOTIABLE default; only change on explicit user instruction
+  target_historical_years: 5   # aim for ~5 historical years where reliable data exists
+  forecast_suffix: "E"         # forecast periods are labelled e.g. FY27E
+  default_consolidation: consolidated
+
+periods:
+  # Historical years always run OLDEST -> NEWEST, left to right.
+  chronology: oldest_to_newest
+
+# Sheets the builder MAY create. Whether each is actually built depends on the
+# disclosure mapping for the specific company (company-specific adaptation).
+sheets:
+  always:
+    - Cover
+    - Sources
+    - Assumptions
+    - Income Statement
+    - Balance Sheet
+    - Cash Flow
+    - 3-Statement Model
+    - Ratios
+    - Checks
+  conditional:
+    Revenue Build: has_revenue
+    Operating Drivers: has_operating_drivers
+    Working Capital: has_working_capital
+    Capex & D&A: has_capex_or_dna
+    Debt: has_debt
+    Valuation: always_frameworks
+    Sensitivities: has_valuation
+
+valuation:
+  build_dcf: true
+  build_trading_comps: true
+  build_sotp_if_segments: true
+  # Framework only. The agent never selects the preferred method or multiple.
+
+sensitivities:
+  build: true
+  grids:
+    - name: WACC vs Terminal Growth
+      requires: dcf
+    - name: Revenue Growth vs EBITDA Margin
+      requires: forecast

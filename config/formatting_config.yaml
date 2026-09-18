@@ -1,0 +1,42 @@
+# Professional financial-modelling formatting conventions.
+# Colour coding is meaningful, never decorative.
+
+fonts:
+  name: Calibri
+  size: 10
+  header_size: 11
+  title_size: 16
+
+# Standard sell-side / IB font colour convention.
+colors:
+  input_blue: "FF0000C0"      # hardcoded historical / external inputs
+  formula_black: "FF000000"   # formulas within the same worksheet
+  link_green: "FF008000"      # links to another worksheet
+  reference_purple: "FF7030A0"# external / reference information
+  error_red: "FFCC0000"       # errors / failed checks
+  header_navy: "FF1F3864"
+  subtle_grey: "FF808080"
+
+fills:
+  assumption_yellow: "FFFFF2CC"  # user assumption cells
+  header_fill: "FF1F3864"
+  subheader_fill: "FFD9E1F2"
+  check_pass: "FFC6EFCE"
+  check_warn: "FFFFEB9C"
+  check_error: "FFFFC7CE"
+  forecast_band: "FFF2F2F2"      # subtle shading distinguishing forecast columns
+
+number_formats:
+  currency: "#,##0.0;(#,##0.0)"
+  currency_int: "#,##0;(#,##0)"
+  ratio: "0.00"
+  percent: "0.0%"
+  multiple: "0.0x"
+  days: "0.0"
+  year_header: "@"
+
+layout:
+  label_col_width: 42
+  data_col_width: 12
+  freeze_panes: true        # freeze label column + header row
+  gridlines: false

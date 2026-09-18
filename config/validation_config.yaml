@@ -1,0 +1,31 @@
+# Validation gates and tolerances.
+
+tolerances:
+  # Absolute tolerance is expressed in the model's reporting unit.
+  balance_sheet_abs: 0.5
+  balance_sheet_rel: 0.005      # 0.5% of total assets
+  cash_flow_abs: 0.5
+  revenue_reconciliation_rel: 0.01
+  restatement_flag_rel: 0.005   # >0.5% difference across reports -> flag
+  rounding_rel: 0.005
+
+gate1_data_validation:
+  require_income_statement: true
+  require_balance_sheet: true
+  require_cash_flow: false        # some companies only give partial CF historically
+  require_units_known: true
+  require_consolidation_known: true
+  require_min_historical_periods: 2
+  fail_on_material_error: true
+
+gate2_model_specification:
+  require_currency: true
+  require_units: true
+  require_period_labels: true
+
+gate3_final_qc:
+  require_balance_check: true
+  require_cashflow_check: true
+  forbid_forecast_hardcodes: true
+  forbid_broken_references: true
+  require_no_circular: true

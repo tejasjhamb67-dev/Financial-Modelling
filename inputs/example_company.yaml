@@ -1,0 +1,97 @@
+# Synthetic test company for the Financial Model Construction Agent.
+# Nova Specialty Chemicals Ltd - a chemicals company with 5 historical years,
+# revenue segments, working capital, capex, debt, a restated comparative and a
+# deliberately missing operating datapoint. Balance sheet balances by
+# construction (reserves reconcile assets less liabilities less share capital).
+
+company: "Nova Specialty Chemicals Ltd"
+currency: INR
+unit: "INR crore"
+consolidation: consolidated
+historical_periods: [FY22, FY23, FY24, FY25, FY26]
+
+documents:
+  - name: "FY24 Annual Report"
+    doc_type: Annual Report
+    fiscal_year: FY24
+    consolidation: consolidated
+    currency: INR
+    unit: "INR crore"
+    relevant_pages: [88, 142, 150]
+    doc_id: DOC01
+  - name: "FY26 Annual Report"
+    doc_type: Annual Report
+    fiscal_year: FY26
+    consolidation: consolidated
+    currency: INR
+    unit: "INR crore"
+    relevant_pages: [92, 146, 158]
+    doc_id: DOC02
+
+provenance:
+  revenue: {document: "FY26 Annual Report", page: 146, section: "Consolidated Statement of P&L"}
+  cash: {document: "FY26 Annual Report", page: 150, section: "Consolidated Balance Sheet"}
+
+segments:
+  revenue:
+    Specialty:  {FY22: 3000, FY23: 3400, FY24: 3900, FY25: 4300, FY26: 4800}
+    Commodity:  {FY22: 1800, FY23: 1900, FY24: 1950, FY25: 2050, FY26: 2150}
+    Others:     {FY22: 200,  FY23: 200,  FY24: 250,  FY25: 300,  FY26: 350}
+
+income_statement:
+  revenue:           {FY22: 5000, FY23: 5500, FY24: 6100, FY25: 6650, FY26: 7300}
+  cogs:              {FY22: 3250, FY23: 3575, FY24: 3965, FY25: 4323, FY26: 4745}
+  employee_expense:  {FY22: 400,  FY23: 440,  FY24: 488,  FY25: 532,  FY26: 584}
+  other_opex:        {FY22: 600,  FY23: 660,  FY24: 732,  FY25: 798,  FY26: 876}
+  depreciation:      {FY22: 200,  FY23: 220,  FY24: 244,  FY25: 266,  FY26: 292}
+  other_income:      {FY22: 50,   FY23: 55,   FY24: 61,   FY25: 67,   FY26: 73}
+  interest_expense:  {FY22: 88,   FY23: 95,   FY24: 100,  FY25: 104,  FY26: 109}
+  tax:               {FY22: 128,  FY23: 141,  FY24: 158,  FY25: 174,  FY26: 192}
+  eps:               {FY22: 38.4, FY23: 42.4, FY24: 47.4, FY25: 52.0, FY26: 57.5}
+
+balance_sheet:
+  cash:                       {FY22: 300,  FY23: 350,  FY24: 400,  FY25: 450,  FY26: 520}
+  receivables:                {FY22: 600,  FY23: 660,  FY24: 740,  FY25: 810,  FY26: 900}
+  inventory:                  {FY22: 530,  FY23: 590,  FY24: 650,  FY25: 720,  FY26: 780}
+  other_current_assets:       {FY22: 150,  FY23: 160,  FY24: 170,  FY25: 180,  FY26: 200}
+  ppe:                        {FY22: 1800, FY23: 2000, FY24: 2200, FY25: 2450, FY26: 2700}
+  intangibles:                {FY22: 200,  FY23: 200,  FY24: 200,  FY25: 220,  FY26: 240}
+  other_non_current_assets:   {FY22: 250,  FY23: 260,  FY24: 270,  FY25: 280,  FY26: 300}
+  payables:                   {FY22: 350,  FY23: 390,  FY24: 430,  FY25: 480,  FY26: 520}
+  short_term_debt:            {FY22: 200,  FY23: 220,  FY24: 240,  FY25: 250,  FY26: 260}
+  other_current_liabilities:  {FY22: 180,  FY23: 190,  FY24: 200,  FY25: 210,  FY26: 230}
+  long_term_debt:             {FY22: 900,  FY23: 950,  FY24: 1000, FY25: 1050, FY26: 1100}
+  other_non_current_liabilities: {FY22: 150, FY23: 160, FY24: 170, FY25: 180, FY26: 200}
+  share_capital:              {FY22: 100,  FY23: 100,  FY24: 100,  FY25: 100,  FY26: 100}
+  reserves:                   {FY22: 1950, FY23: 2210, FY24: 2490, FY25: 2840, FY26: 3230}
+
+cash_flow:
+  cfo:          {FY22: 500,  FY23: 560,  FY24: 610,  FY25: 660,  FY26: 760}
+  capex:        {FY22: 380,  FY23: 420,  FY24: 444,  FY25: 516,  FY26: 562}
+  cfi:          {FY22: -400, FY23: -440, FY24: -464, FY25: -536, FY26: -582}
+  cff:          {FY22: -80,  FY23: -70,  FY24: -96,  FY25: -74,  FY26: -108}
+  opening_cash: {FY22: 280}
+
+operating_drivers:
+  capacity_ktonnes:
+    label: "Installed capacity"
+    unit: "'000 tonnes"
+    values: {FY22: 300, FY23: 300, FY24: 340, FY25: 340, FY26: 380}
+  volume_ktonnes:
+    label: "Sales volume"
+    unit: "'000 tonnes"
+    values: {FY22: 240, FY23: 255, FY24: 280, FY25: 300, FY26: 330}
+  utilisation_pct:
+    label: "Capacity utilisation"
+    unit: "%"
+    # FY22 deliberately NOT disclosed -> demonstrates 'Not Found' handling
+    values: {FY22: null, FY23: 85, FY24: 82, FY25: 88, FY26: 87}
+
+restatements:
+  - metric: revenue
+    period: FY24
+    old_value: 6150
+    old_document: "FY24 Annual Report"
+    new_value: 6100
+    new_document: "FY26 Annual Report"
+    reason: "Reclassification of a product line from Specialty to Others; FY24 comparative restated in the FY26 Annual Report."

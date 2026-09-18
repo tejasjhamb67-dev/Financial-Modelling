@@ -1,0 +1,132 @@
+# Canonical accounting taxonomy and construction rules.
+#
+# The `metrics` map defines canonical metric keys, their human labels, the
+# statement they belong to, and how they are CONSTRUCTED. Construction rules
+# use canonical keys and are rendered into explicit additive Excel formulas
+# (e.g. =B10+B11+B12) rather than SUM() so that construction stays visible.
+#
+# `sign` documents the natural sign of the line as disclosed (costs are stored
+# as positive magnitudes and subtracted in construction formulas).
+
+income_statement:
+  order:
+    - revenue
+    - cogs
+    - gross_profit
+    - employee_expense
+    - other_opex
+    - ebitda
+    - depreciation
+    - ebit
+    - other_income
+    - interest_expense
+    - pbt
+    - tax
+    - pat
+    - eps
+  metrics:
+    revenue:        {label: "Revenue from operations", construct: reported_or_segment_sum}
+    cogs:           {label: "Cost of goods sold", sign: cost}
+    gross_profit:   {label: "Gross profit", construct: "revenue - cogs"}
+    employee_expense: {label: "Employee expense", sign: cost}
+    other_opex:     {label: "Other operating expense", sign: cost}
+    ebitda:         {label: "EBITDA", construct: "gross_profit - employee_expense - other_opex"}
+    depreciation:   {label: "Depreciation & amortisation", sign: cost}
+    ebit:           {label: "EBIT", construct: "ebitda - depreciation"}
+    other_income:   {label: "Other income"}
+    interest_expense: {label: "Finance costs", sign: cost}
+    pbt:            {label: "Profit before tax", construct: "ebit + other_income - interest_expense"}
+    tax:            {label: "Tax expense", sign: cost}
+    pat:            {label: "Profit after tax", construct: "pbt - tax"}
+    eps:            {label: "EPS (reported)"}
+
+balance_sheet:
+  order:
+    - cash
+    - receivables
+    - inventory
+    - other_current_assets
+    - total_current_assets
+    - ppe
+    - intangibles
+    - other_non_current_assets
+    - total_non_current_assets
+    - total_assets
+    - payables
+    - short_term_debt
+    - other_current_liabilities
+    - total_current_liabilities
+    - long_term_debt
+    - other_non_current_liabilities
+    - total_non_current_liabilities
+    - total_liabilities
+    - share_capital
+    - reserves
+    - total_equity
+    - total_equity_and_liabilities
+  metrics:
+    cash:           {label: "Cash & equivalents"}
+    receivables:    {label: "Trade receivables"}
+    inventory:      {label: "Inventories"}
+    other_current_assets: {label: "Other current assets"}
+    total_current_assets: {label: "Total current assets", construct: "cash + receivables + inventory + other_current_assets"}
+    ppe:            {label: "Property, plant & equipment"}
+    intangibles:    {label: "Intangible assets"}
+    other_non_current_assets: {label: "Other non-current assets"}
+    total_non_current_assets: {label: "Total non-current assets", construct: "ppe + intangibles + other_non_current_assets"}
+    total_assets:   {label: "Total assets", construct: "total_current_assets + total_non_current_assets"}
+    payables:       {label: "Trade payables"}
+    short_term_debt: {label: "Short-term borrowings"}
+    other_current_liabilities: {label: "Other current liabilities"}
+    total_current_liabilities: {label: "Total current liabilities", construct: "payables + short_term_debt + other_current_liabilities"}
+    long_term_debt: {label: "Long-term borrowings"}
+    other_non_current_liabilities: {label: "Other non-current liabilities"}
+    total_non_current_liabilities: {label: "Total non-current liabilities", construct: "long_term_debt + other_non_current_liabilities"}
+    total_liabilities: {label: "Total liabilities", construct: "total_current_liabilities + total_non_current_liabilities"}
+    share_capital:  {label: "Share capital"}
+    reserves:       {label: "Reserves & surplus"}
+    total_equity:   {label: "Total equity", construct: "share_capital + reserves"}
+    total_equity_and_liabilities: {label: "Total equity & liabilities", construct: "total_equity + total_liabilities"}
+
+cash_flow:
+  order:
+    - pat
+    - depreciation
+    - cf_working_capital_change
+    - cf_other_operating
+    - cfo
+    - capex
+    - cf_other_investing
+    - cfi
+    - debt_raised
+    - debt_repaid
+    - dividends_paid
+    - cf_other_financing
+    - cff
+    - net_change_in_cash
+    - opening_cash
+    - closing_cash
+  metrics:
+    pat:            {label: "Profit after tax", construct: link_income_statement}
+    depreciation:   {label: "Depreciation & amortisation", construct: link_income_statement}
+    cf_working_capital_change: {label: "Change in working capital"}
+    cf_other_operating: {label: "Other operating adjustments"}
+    cfo:            {label: "Cash flow from operations", construct: "pat + depreciation + cf_working_capital_change + cf_other_operating"}
+    capex:          {label: "Capital expenditure", sign: cost}
+    cf_other_investing: {label: "Other investing cash flow"}
+    cfi:            {label: "Cash flow from investing", construct: "cf_other_investing - capex"}
+    debt_raised:    {label: "Debt raised"}
+    debt_repaid:    {label: "Debt repaid", sign: cost}
+    dividends_paid: {label: "Dividends paid", sign: cost}
+    cf_other_financing: {label: "Other financing cash flow"}
+    cff:            {label: "Cash flow from financing", construct: "debt_raised - debt_repaid - dividends_paid + cf_other_financing"}
+    net_change_in_cash: {label: "Net change in cash", construct: "cfo + cfi + cff"}
+    opening_cash:   {label: "Opening cash"}
+    closing_cash:   {label: "Closing cash", construct: "opening_cash + net_change_in_cash"}
+
+# Sign convention notes preserved for auditability.
+notes:
+  cost_lines_stored_positive: >
+    Cost / outflow lines (cogs, opex, depreciation, tax, capex, debt_repaid,
+    dividends_paid) are stored as positive magnitudes in the source database and
+    SUBTRACTED in the construction formulas. This keeps the model readable.
