@@ -25,12 +25,16 @@ A genuine `.xlsx` workbook (not a PDF-to-Excel dump) containing:
   and a highlighted *"analyst review required"* list.
 - **Sources** — full provenance for every extracted datapoint and a document
   inventory (what / when / where / how / why for each number).
-- **Reported Financials** — the raw historical statements dumped verbatim, exactly
-  as disclosed in the source documents (no mapping, construction or forecast), in
-  one sheet. This is the undistorted RAW layer, placed right before Assumptions so
-  the analyst can always see the untouched data the model was built from. Supply a
-  `reported_statements` block in the package for a line-perfect dump; otherwise the
-  sheet falls back to the source database grouped by statement.
+- **Reported Financials** — the raw historical statements exactly as disclosed in
+  the source documents, in one sheet, right before Assumptions. Disclosed line
+  items are hardcoded inputs; the statement totals are explicit additive formulas
+  of their components (`=B10+B11+…`, never `SUM()`, never a hardcoded total), so
+  the dump is self-checking. This is the single hardcoded source of historical
+  truth: the Income Statement, Balance Sheet and Cash Flow **reference this sheet**
+  (green links, e.g. COGS = network + access + licence rows) rather than
+  re-hardcoding anything. Supply a `reported_statements` block in the package for a
+  line-perfect dump; otherwise the sheet falls back to the source database grouped
+  by statement. (Cell comments are not used anywhere — provenance lives on Sources.)
 - **Assumptions** — the analyst's control panel; every forecast is driven by a
   yellow input cell here (seeded with neutral hold-last-actual placeholders).
 - **Revenue Build** — segment build with explicit additive totals and mix %.

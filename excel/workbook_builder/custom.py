@@ -56,8 +56,7 @@ class CustomSheet:
         cell.font = styles.base_font(styles.font_color_for(data_type, is_link=is_link), bold=bold)
         cell.number_format = number_format
         cell.alignment = styles.RIGHT
-        if comment:
-            cell.comment = Comment(comment, "FM Agent")
+        # (cell comments intentionally omitted; provenance lives on the Sources sheet)
         addr = f"{get_column_letter(col)}{row}"
         if key and period:
             self.registry.register_addr(self.name, key, period, addr)

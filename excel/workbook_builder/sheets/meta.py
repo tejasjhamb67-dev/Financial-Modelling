@@ -189,32 +189,47 @@ def fill_reported(ws, registry, spec: ModelSpec, db: SourceDatabase) -> None:
             c.alignment = styles.CENTER
             c.border = styles.BORDER_BOTTOM
         row += 1
+        key_row: dict[str, int] = {}  # raw line key -> row (for additive totals)
         for line in block.get("lines", []):
             label = ("    " * int(line.get("indent", 0))) + str(line.get("label", ""))
             note = line.get("note")
             if note not in (None, ""):
                 label = f"{label}  (Note {note})"
             bold = bool(line.get("bold", False))
+            key = line.get("key")
             if line.get("section"):
                 cs.label(row, 1, str(line.get("label", "")), bold=True, color=styles._C["header_navy"])
                 row += 1
                 continue
             cs.label(row, 1, label, bold=bold)
+            sum_of = line.get("sum_of") or []
+            minus = line.get("minus") or []
             values = line.get("values", {})
             for p in periods:
-                v = values.get(p)
                 col = col_of[p]
+                if sum_of or minus:
+                    # Totals/subtotals are explicit formulas of the component rows
+                    # (=B1+B2+B3-B4 ...), never SUM(), never a hardcoded number.
+                    plus = [f"{get_column_letter(col)}{key_row[k]}" for k in sum_of if k in key_row]
+                    neg = [f"{get_column_letter(col)}{key_row[k]}" for k in minus if k in key_row]
+                    if plus or neg:
+                        expr = "+".join(plus) + "".join(f"-{a}" for a in neg)
+                        cs.put(row, col, "=" + expr, DataType.DERIVED,
+                               number_format=styles.NF_CURRENCY, bold=bold,
+                               key=key, period=p)
+                    continue
+                v = values.get(p)
                 if v is None:
-                    cell = ws.cell(row=row, column=col, value="Not Found" if p in values else None)
                     if p in values:
+                        cell = ws.cell(row=row, column=col, value="Not Found")
                         cell.font = styles.error_font()
                         cell.alignment = styles.RIGHT
                 else:
-                    comment = f"{meta_line}\nSource: {doc or 'source document'}"
-                    if pages:
-                        comment += f", p.{','.join(str(x) for x in pages)}"
+                    # Every disclosed leaf line is a hardcoded input on this sheet.
                     cs.put(row, col, v, DataType.REPORTED, number_format=styles.NF_CURRENCY,
-                           comment=comment, bold=bold)
+                           bold=bold, key=key, period=p)
+            if key:
+                key_row[key] = row
             row += 1
         row += 1  # blank line between statements
 

@@ -30,6 +30,42 @@ def source_comment(dp: DataPoint) -> str:
     return "\n".join(parts)
 
 
+REPORTED_SHEET = "Reported Financials"
+
+
+def hist_input(spec, db: SourceDatabase, metric: str, period: str,
+               registry: CellRegistry,
+               consol: Optional[Consolidation] = None) -> Optional[CellValue]:
+    """A historical input value.
+
+    When the metric is mapped into the Reported Financials dump, return a GREEN
+    link (an explicit +/- combination of the raw disclosed line cells) so the
+    raw dump is the single hardcoded source of truth. Otherwise fall back to a
+    blue hardcoded reported value.
+    """
+    mapping = getattr(spec, "raw_map", {}).get(metric) if spec else None
+    if mapping:
+        parts = []
+        ok = True
+        for key, sign in mapping:
+            ref = registry.ref(REPORTED_SHEET, key, period)
+            if ref is None:
+                ok = False
+                break
+            parts.append((sign, ref))
+        if ok and parts:
+            expr = ""
+            for i, (sign, ref) in enumerate(parts):
+                if sign < 0:
+                    expr += f"-{ref}"
+                elif i == 0:
+                    expr += ref
+                else:
+                    expr += f"+{ref}"
+            return CellValue(content="=" + expr, data_type=DataType.LINKED)
+    return reported(db, metric, period, consol)
+
+
 def reported(db: SourceDatabase, metric: str, period: str,
              consol: Optional[Consolidation] = None) -> Optional[CellValue]:
     """A directly disclosed historical number (blue input) with source comment."""

@@ -43,6 +43,9 @@ class ModelSpec:
     valuation_methods: list[str] = field(default_factory=list)
     sheets: list[str] = field(default_factory=list)
     exceptions: list[str] = field(default_factory=list)
+    # canonical metric -> [(raw_line_key, sign)] mapping into the Reported
+    # Financials dump, so statement historicals link to the raw layer.
+    raw_map: dict = field(default_factory=dict)
 
     @property
     def all_periods(self) -> list[str]:
@@ -140,6 +143,15 @@ def build_spec(db: SourceDatabase, disclosure: DisclosureMap) -> ModelSpec:
         sheets.append("Sensitivities")
     sheets.append("Checks")
 
+    # raw_map: canonical metric -> [(raw line key, sign)] from the reported dump
+    raw_map: dict[str, list] = {}
+    for block in db.reported_statements:
+        for line in block.get("lines", []):
+            mt = line.get("maps_to")
+            key = line.get("key")
+            if mt and key:
+                raw_map.setdefault(mt, []).append((key, int(line.get("map_sign", 1))))
+
     exceptions = list(disclosure.notes)
     if not hist:
         exceptions.append("No historical FY periods identified - cannot build model.")
@@ -161,6 +173,7 @@ def build_spec(db: SourceDatabase, disclosure: DisclosureMap) -> ModelSpec:
         valuation_methods=valuation,
         sheets=sheets,
         exceptions=exceptions,
+        raw_map=raw_map,
     )
 
 

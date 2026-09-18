@@ -62,13 +62,13 @@ def _resolvable(db, statement_key, metric, period, _seen=None) -> bool:
     return all(_resolvable(db, statement_key, c, period, _seen) for c in comps)
 
 
-def _construct_or_report(db, statement_key, metric, sheet, period, registry) -> Optional[CellValue]:
+def _construct_or_report(spec, db, statement_key, metric, sheet, period, registry) -> Optional[CellValue]:
     comps = _components(statement_key, metric)
     if comps and all(_resolvable(db, statement_key, c, period) for c in comps):
         cv = fw.construct_cv(_TAX.construction(statement_key, metric), sheet, period, registry)
         if cv:
             return cv
-    return fw.reported(db, metric, period, _CONSOL)
+    return fw.hist_input(spec, db, metric, period, registry, _CONSOL)
 
 
 # ---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ def build_income_statement(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder:
                 if metric == "revenue" and has_revbuild:
                     return fw.link("Revenue Build", "revenue", period, registry,
                                    comment="Revenue linked from Revenue Build")
-                return _construct_or_report(db, "income_statement", metric, sheet, period, registry)
+                return _construct_or_report(spec, db, "income_statement", metric, sheet, period, registry)
             # ---- forecast ----
             p = _prev(spec, period)
             rev = registry.addr(sheet, "revenue", period)
@@ -175,7 +175,7 @@ def build_balance_sheet(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder:
     def writer_for(metric):
         def writer(period, registry):
             if period in hist:
-                return _construct_or_report(db, "balance_sheet", metric, sheet, period, registry)
+                return _construct_or_report(spec, db, "balance_sheet", metric, sheet, period, registry)
             p = _prev(spec, period)
             # forecast
             if metric in totals:
@@ -280,23 +280,23 @@ def build_cash_flow(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder:
                         return CellValue(f"={pc}", DataType.LINKED)
                     if db.get("opening_cash", period, _CONSOL) and \
                             db.value("opening_cash", period, _CONSOL) is not None:
-                        return fw.reported(db, "opening_cash", period, _CONSOL)
-                    return fw.reported(db, "cash", period, _CONSOL)
+                        return fw.hist_input(spec, db, "opening_cash", period, registry, _CONSOL)
+                    return fw.hist_input(spec, db, "cash", period, registry, _CONSOL)
                 # Closing cash: opening + net change (roll-forward)
                 if metric == "closing_cash":
                     oc = registry.addr(sheet, "opening_cash", period)
                     nc = registry.addr(sheet, "net_change_in_cash", period)
                     if oc and nc:
                         return CellValue(f"={oc}+{nc}", DataType.DERIVED)
-                    return _construct_or_report(db, "cash_flow", metric, sheet, period, registry)
+                    return _construct_or_report(spec, db, "cash_flow", metric, sheet, period, registry)
                 # Net change: reported if disclosed, else CFO+CFI+CFF (subtotals below)
                 if metric == "net_change_in_cash":
                     if db.value("net_change_in_cash", period, _CONSOL) is not None:
-                        return fw.reported(db, "net_change_in_cash", period, _CONSOL)
+                        return fw.hist_input(spec, db, "net_change_in_cash", period, registry, _CONSOL)
                     return fw.construct_cv("cfo + cfi + cff", sheet, period, registry)
                 # Subtotals cfo/cfi/cff and every line: prefer the reported total,
                 # construct only when all components are disclosed (accuracy first).
-                return _construct_or_report(db, "cash_flow", metric, sheet, period, registry)
+                return _construct_or_report(spec, db, "cash_flow", metric, sheet, period, registry)
             # ---- forecast ----
             if metric == "pat":
                 return fw.link("Income Statement", "pat", period, registry)

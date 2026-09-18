@@ -188,10 +188,7 @@ class SheetBuilder:
                 cell.fill = styles.assumption_fill()
         elif cv.data_type == DataType.ASSUMPTION:
             cell.fill = styles.assumption_fill()
-        # comment
-        if cv.comment:
-            from openpyxl.comments import Comment
-            cell.comment = Comment(cv.comment, "FM Agent")
+        # (cell comments intentionally omitted; provenance lives on the Sources sheet)
         # lineage
         registry.add_lineage(Lineage(
             sheet=self.name, metric=spec.key, period=period,

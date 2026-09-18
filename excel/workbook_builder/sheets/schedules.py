@@ -49,7 +49,7 @@ def build_revenue(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder:
     def seg_writer(metric):
         def w(period, registry):
             if period in hist:
-                return fw.reported(db, metric, period, _CONSOL)
+                return fw.hist_input(spec, db, metric, period, registry, _CONSOL)
             p = _prev(spec, period)
             pa = registry.addr(sheet, metric, p)
             g = A(registry, "assum_revenue_growth", period)
@@ -68,7 +68,7 @@ def build_revenue(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder:
                 return CellValue("=" + "+".join(addrs), DataType.DERIVED,
                                  comment="Total revenue = sum of disclosed segments")
         if period in hist:
-            return fw.reported(db, "revenue", period, _CONSOL)
+            return fw.hist_input(spec, db, "revenue", period, registry, _CONSOL)
         p = _prev(spec, period)
         pa = registry.addr(sheet, "revenue", p)
         g = A(registry, "assum_revenue_growth", period)
@@ -111,7 +111,7 @@ def build_operating_drivers(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder
     def w_for(metric):
         def w(period, registry):
             if period in hist:
-                return fw.reported(db, metric, period, None)
+                return fw.hist_input(spec, db, metric, period, registry, None)
             p = _prev(spec, period)
             pa = registry.addr(sheet, metric, p)
             return CellValue(f"={pa}", DataType.DERIVED,
@@ -216,7 +216,7 @@ def build_capex_dna(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder:
 
     def capex_writer(period, registry):
         if period in hist:
-            cv = fw.reported(db, "capex", period, _CONSOL)
+            cv = fw.hist_input(spec, db, "capex", period, registry, _CONSOL)
             if cv:
                 return cv
             return fw.link("Cash Flow", "capex", period, registry)
@@ -288,13 +288,13 @@ def build_debt(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder:
 
     def drawdown_writer(period, registry):
         if period in hist:
-            cv = fw.reported(db, "debt_raised", period, _CONSOL)
+            cv = fw.hist_input(spec, db, "debt_raised", period, registry, _CONSOL)
             return cv if cv else CellValue(0, DataType.REPORTED)
         return fw.link("Assumptions", "assum_debt_drawdown", period, registry)
 
     def repayment_writer(period, registry):
         if period in hist:
-            cv = fw.reported(db, "debt_repaid", period, _CONSOL)
+            cv = fw.hist_input(spec, db, "debt_repaid", period, registry, _CONSOL)
             return cv if cv else CellValue(0, DataType.REPORTED)
         return fw.link("Assumptions", "assum_debt_repayment", period, registry)
 

@@ -145,7 +145,8 @@ def build_database(pkg: dict[str, Any]) -> SourceDatabase:
     for block in pkg.get("reported_statements", []) or []:
         norm_lines = []
         for line in block.get("lines", []) or []:
-            meta_keys = {"label", "note", "bold", "indent", "section", "values"}
+            meta_keys = {"label", "note", "bold", "indent", "section", "values",
+                         "key", "maps_to", "map_sign", "sum_of", "minus"}
             values = dict(line.get("values", {}))
             for k, v in line.items():
                 if k not in meta_keys:
@@ -156,6 +157,11 @@ def build_database(pkg: dict[str, Any]) -> SourceDatabase:
                 "bold": bool(line.get("bold", False)),
                 "indent": int(line.get("indent", 0)),
                 "section": bool(line.get("section", False)),
+                "key": line.get("key"),
+                "maps_to": line.get("maps_to"),
+                "map_sign": int(line.get("map_sign", 1)),
+                "sum_of": list(line.get("sum_of", []) or []),
+                "minus": list(line.get("minus", []) or []),
                 "values": {p: _num(x) for p, x in values.items()},
                 "raw_values": values,
             })
