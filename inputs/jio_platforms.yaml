@@ -1,0 +1,218 @@
+company: Jio Platforms Limited
+currency: INR
+unit: INR crore
+consolidation: consolidated
+historical_periods:
+- FY23
+- FY24
+- FY25
+- FY26
+documents:
+- name: Consolidated Financial Statements FY2023-24
+  doc_type: Annual Report (Consolidated FS)
+  fiscal_year: FY24
+  consolidation: consolidated
+  currency: INR
+  unit: INR crore
+  relevant_pages:
+  - 10
+  - 11
+  - 13
+  doc_id: DOC_FY24
+- name: Consolidated Financial Statements FY2024-25
+  doc_type: Annual Report (Consolidated FS)
+  fiscal_year: FY25
+  consolidation: consolidated
+  currency: INR
+  unit: INR crore
+  relevant_pages:
+  - 9
+  - 10
+  - 12
+  doc_id: DOC_FY25
+- name: Consolidated Financial Statements FY2025-26
+  doc_type: Annual Report (Consolidated FS)
+  fiscal_year: FY26
+  consolidation: consolidated
+  currency: INR
+  unit: INR crore
+  relevant_pages:
+  - 9
+  - 10
+  - 13
+  doc_id: DOC_FY26
+provenance:
+  revenue:
+    document: Consolidated Financial Statements FY2025-26
+    page: 10
+    section: Consolidated Statement of Profit and Loss
+  cogs:
+    document: Consolidated Financial Statements FY2025-26
+    page: 10
+    section: Mapped = Network Operating Expenses + Access Charges + License Fees/Spectrum
+      Charges
+  other_opex:
+    document: Consolidated Financial Statements FY2025-26
+    page: 10
+    section: Mapped = Selling & Distribution + Other Expenses
+  cash:
+    document: Consolidated Financial Statements FY2025-26
+    page: 9
+    section: Consolidated Balance Sheet
+  short_term_debt:
+    document: Consolidated Financial Statements FY2025-26
+    page: 9
+    section: Mapped = Current Borrowings + Current Lease Liab + Current Deferred Payment
+      Liab
+  long_term_debt:
+    document: Consolidated Financial Statements FY2025-26
+    page: 9
+    section: Mapped = Non-current Borrowings + Lease Liab + Deferred Payment Liab
+  intangibles:
+    document: Consolidated Financial Statements FY2025-26
+    page: 9
+    section: Mapped = Spectrum + Other Intangibles + Goodwill
+  reserves:
+    document: Consolidated Financial Statements FY2025-26
+    page: 9
+    section: Other Equity + Non-Controlling Interest
+income_statement:
+  revenue:
+    FY23: 98099
+    FY24: 109558
+    FY25: 128218
+    FY26: 146885
+  cogs:
+    FY23: 38346
+    FY24: 40617
+    FY25: 45131
+    FY26: 47839
+  employee_expense:
+    FY23: 4445
+    FY24: 5382
+    FY25: 6208
+    FY26: 6649
+  other_opex:
+    FY23: 7177
+    FY24: 9217
+    FY25: 13824
+    FY26: 19016
+  depreciation:
+    FY23: 18964
+    FY24: 22103
+    FY25: 24138
+    FY26: 27249
+  other_income:
+    FY23: 590
+    FY24: 617
+    FY25: 1115
+    FY26: 2874
+  interest_expense:
+    FY23: 4082
+    FY24: 4048
+    FY25: 4905
+    FY26: 8653
+  tax:
+    FY23: 6546
+    FY24: 7374
+    FY25: 9007
+    FY26: 10300
+  eps:
+    FY23: 21.4
+    FY24: 23.96
+    FY25: 29.21
+    FY26: 33.63
+balance_sheet:
+  cash:
+    FY23: 1032
+    FY24: 2489
+    FY25: 8012
+    FY26: 16557
+  receivables:
+    FY23: 3251
+    FY24: 2851
+    FY25: 2461
+    FY26: 2527
+  inventory:
+    FY23: 63
+    FY24: 119
+    FY25: 227
+    FY26: 263
+  other_current_assets:
+    FY23: 31893
+    FY24: 32780
+    FY25: 45213
+    FY26: 53410
+  ppe:
+    FY23: 146923
+    FY24: 148874
+    FY25: 187271
+    FY26: 250992
+  intangibles:
+    FY23: 86604
+    FY24: 88282
+    FY25: 173761
+    FY26: 227996
+  other_non_current_assets:
+    FY23: 224140
+    FY24: 264185
+    FY25: 164289
+    FY26: 63849
+  payables:
+    FY23: 5138
+    FY24: 6443
+    FY25: 7656
+    FY26: 8932
+  short_term_debt:
+    FY23: 21340
+    FY24: 18966
+    FY25: 36390
+    FY26: 30614
+  other_current_liabilities:
+    FY23: 42651
+    FY24: 45809
+    FY25: 34055
+    FY26: 27635
+  long_term_debt:
+    FY23: 146571
+    FY24: 160989
+    FY25: 158452
+    FY26: 158569
+  other_non_current_liabilities:
+    FY23: 20527
+    FY24: 27952
+    FY25: 38500
+    FY26: 52768
+  share_capital:
+    FY23: 8939
+    FY24: 8939
+    FY25: 8939
+    FY26: 8939
+  reserves:
+    FY23: 248740
+    FY24: 270482
+    FY25: 297242
+    FY26: 328137
+cash_flow:
+  cfo:
+    FY23: 50488
+    FY24: 57662
+    FY25: 68156
+    FY26: 77556
+  cfi:
+    FY23: -36037
+    FY24: -56588
+    FY25: -63726
+    FY26: -43591
+  cff:
+    FY23: -13987
+    FY24: 379
+    FY25: 1093
+    FY26: -25419
+  capex:
+    FY23: 38354
+    FY24: 53607
+    FY25: 44349
+    FY26: 34255
+  opening_cash:
+    FY23: 568

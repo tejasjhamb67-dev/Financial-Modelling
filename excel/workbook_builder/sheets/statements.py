@@ -344,6 +344,13 @@ def build_cash_flow(spec: ModelSpec, db: SourceDatabase) -> SheetBuilder:
             if metric == "net_change_in_cash":
                 return fw.construct_cv(_TAX.construction("cash_flow", "net_change_in_cash"), sheet, period, registry)
             if metric == "opening_cash":
+                # Forecast opening cash anchors to the prior period's reported /
+                # forecast balance-sheet cash, so the forecast ties exactly even
+                # when historical CF carries disclosed non-cash reconciling items.
+                bs_cash_prev = registry.ref("Balance Sheet", "cash", p)
+                if bs_cash_prev:
+                    return CellValue(f"={bs_cash_prev}", DataType.LINKED,
+                                     comment="Opening cash = prior-year balance-sheet cash")
                 pc = registry.addr(sheet, "closing_cash", p)
                 return CellValue(f"={pc}", DataType.LINKED) if pc else None
             if metric == "closing_cash":
