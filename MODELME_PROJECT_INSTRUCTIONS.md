@@ -176,6 +176,117 @@ assumptions in the yellow cells so the model computes forecasts, ratios and valu
 Do NOT present the numbers as a finished valuation or a recommendation. Surface what
 needs human judgment; leave the judgment to the analyst. If the sources are thin, say
 so plainly rather than compensating with invented detail.
+
+# SPECIFICATIONS (the exact rules the workflow above must follow)
+
+## SPEC 1 — Canonical accounting taxonomy & construction formulas
+Use these canonical lines, in this order, and build every subtotal/total as the
+EXPLICIT ADDITIVE FORMULA shown (never SUM(), never a hardcoded total). Map the
+company's disclosed line names onto these keys and record the original name.
+
+Income Statement (order): revenue, cogs, gross_profit, employee_expense, other_opex,
+ebitda, depreciation, ebit, other_income, interest_expense, pbt, tax, pat, eps
+  - gross_profit = revenue - cogs
+  - ebitda       = gross_profit - employee_expense - other_opex
+  - ebit         = ebitda - depreciation
+  - pbt          = ebit + other_income - interest_expense
+  - pat          = pbt - tax
+  - revenue      = reported revenue, or the sum of disclosed segment revenue
+
+Balance Sheet (order): cash, receivables, inventory, other_current_assets,
+total_current_assets, ppe, intangibles, other_non_current_assets,
+total_non_current_assets, total_assets, payables, short_term_debt,
+other_current_liabilities, total_current_liabilities, long_term_debt,
+other_non_current_liabilities, total_non_current_liabilities, total_liabilities,
+share_capital, reserves, total_equity, total_equity_and_liabilities
+  - total_current_assets     = cash + receivables + inventory + other_current_assets
+  - total_non_current_assets = ppe + intangibles + other_non_current_assets
+  - total_assets             = total_current_assets + total_non_current_assets
+  - total_current_liabilities= payables + short_term_debt + other_current_liabilities
+  - total_non_current_liab.  = long_term_debt + other_non_current_liabilities
+  - total_liabilities        = total_current_liabilities + total_non_current_liabilities
+  - total_equity             = share_capital + reserves
+  - total_equity_and_liab.   = total_equity + total_liabilities
+
+Cash Flow (order): pat, depreciation, cf_working_capital_change, cf_other_operating,
+cfo, capex, cf_other_investing, cfi, debt_raised, debt_repaid, dividends_paid,
+cf_other_financing, cff, net_change_in_cash, opening_cash, closing_cash
+  - pat, depreciation  = LINK to the Income Statement (do not re-hardcode)
+  - cfo = pat + depreciation + cf_working_capital_change + cf_other_operating
+  - cfi = cf_other_investing - capex
+  - cff = debt_raised - debt_repaid - dividends_paid + cf_other_financing
+  - net_change_in_cash = cfo + cfi + cff
+  - closing_cash       = opening_cash + net_change_in_cash
+
+SIGN CONVENTION: cost/outflow lines (cogs, opex, depreciation, tax, capex,
+debt_repaid, dividends_paid) are stored as POSITIVE magnitudes and SUBTRACTED in the
+construction formulas above. Keep this consistent so the model stays readable.
+
+## SPEC 2 — Model configuration (structural defaults, not company assumptions)
+  - forecast_years = 3 (non-negotiable default; change only on explicit user request)
+  - target_historical_years = ~5 where reliable data exists
+  - forecast periods labelled with suffix "E" (e.g. FY27E); historical unmarked
+  - default consolidation = consolidated; never mix consolidated and standalone
+  - chronology = oldest -> newest, left to right
+  - Sheets ALWAYS built: Cover, Sources, Assumptions, Income Statement, Balance Sheet,
+    Cash Flow, 3-Statement Model, Ratios, Checks.
+  - Sheets built CONDITIONALLY on disclosure: Revenue Build (if revenue segments),
+    Operating Drivers (if KPIs disclosed), Working Capital (if WC items), Capex & D&A
+    (if capex/D&A), Debt (if borrowings), Valuation (always — frameworks), Sensitivities
+    (if valuation built). Reported Financials is built whenever historicals exist.
+
+## SPEC 3 — Validation gates & numeric tolerances
+Gate 1 (Data Validation): require Income Statement + Balance Sheet; Cash Flow optional
+(some companies disclose partial CF); units known; consolidation known; at least 2
+historical periods (target 5); FAIL and stop on a material error.
+Gate 2 (Model Spec): require currency, units, and period labels resolved.
+Gate 3 (Final QC): balance-sheet identity check present and passing by construction;
+cash-flow tie check present; NO hardcodes in forecast cells; NO broken references
+(`#REF!`); no circular references. Report the QC summary
+(e.g. "N formula cells, 0 broken refs, 0 forecast hardcodes").
+Tolerances (in the reporting unit / as a ratio):
+  - balance sheet: 0.5 absolute, or 0.5% of total assets
+  - cash flow tie: 0.5 absolute
+  - revenue reconciliation: 1%
+  - restatement flag: > 0.5% difference of the same line across reports -> flag it
+  - rounding: 0.5%
+
+## SPEC 4 — Formatting & colour conventions (meaningful, never decorative)
+Font: Calibri 10 (headers 11, titles 16). Gridlines off. Freeze the label column and
+header row. Label column width ~42, data columns ~12.
+Font colours (ARGB hex): input_blue FF0000C0 (hardcoded historical/external inputs),
+formula_black FF000000 (same-sheet formulas), link_green FF008000 (cross-sheet links),
+reference_purple FF7030A0 (external/reference info), error_red FFCC0000 (failed checks),
+header_navy FF1F3864, subtle_grey FF808080.
+Fills: assumption_yellow FFFFF2CC (analyst input cells), header_fill FF1F3864,
+subheader_fill FFD9E1F2, check_pass FFC6EFCE, check_warn FFFFEB9C, check_error FFFFC7CE,
+forecast_band FFF2F2F2 (subtle shading over forecast columns).
+Number formats: currency "#,##0.0;(#,##0.0)", currency_int "#,##0;(#,##0)",
+ratio "0.00", percent "0.0%", multiple "0.0x", days "0.0", year headers as text "@".
+
+## SPEC 5 — Valuation & sensitivities (frameworks only)
+Build a DCF, an EV/EBITDA cross-check, a trading-comps template, and — if segment
+revenue is disclosed — a SOTP scaffold. Leave WACC, terminal growth, exit multiple,
+the peer set and any target as EMPTY yellow inputs; never fill a valuation opinion,
+method choice, multiple or price. Sensitivity grids: "WACC vs Terminal Growth"
+(requires the DCF) and "Revenue Growth vs EBITDA Margin" (requires the forecast), each
+recomputing the dependent output live.
+
+## SPEC 6 — Provenance & data-quality markers
+Every extracted datapoint carries {document, fiscal year, page, statement/section} on
+the Sources sheet. Markers: `N/A`, `Not Disclosed`, `Not Found`, `Requires Review`
+(a value that could not be reliably established — never guessed) and `DERIVED` (a value
+you legitimately calculated, which keeps its formula). Restatements: use the restated
+figure in the model, and record the original figure plus the restatement as a note.
+
+## SPEC 7 — Deliverables & checks
+Deliver: (a) the .xlsx workbook; (b) a BUILD REPORT (sheet-by-sheet, with gate results);
+(c) a DILIGENCE REPORT (data-quality notes, restatements, mapping judgment calls, open
+questions); (d) the ANALYST REVIEW-REQUIRED CHECKLIST (every REQUIRES_REVIEW, every
+missing/Not Disclosed datapoint, every restatement, and every Check that is not PASS —
+each with its source reference). The Checks sheet carries, at minimum: balance-sheet
+identity, cash-flow tie, revenue reconciliation and debt reconciliation, each showing a
+live PASS / WARNING / ERROR — checks are NEVER forced to pass.
 ```
 
 ---
