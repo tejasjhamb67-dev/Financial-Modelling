@@ -74,6 +74,19 @@ Constructive totals use explicit additive formulas (`=B10+B11+B12`), never
 
 ---
 
+## Two ways to run it
+
+- **As a Python engine (this repo):** the deterministic pipeline described below —
+  drive it directly with `main.py`, or via the `/modelme` slash command in Claude Code
+  (`.claude/commands/modelme.md`).
+- **As a Claude Project (no code):** paste
+  [`MODELME_PROJECT_INSTRUCTIONS.md`](MODELME_PROJECT_INSTRUCTIONS.md) into a Claude
+  Project's custom instructions, upload the company's annual reports as Project
+  knowledge, and type `/modelme <Company>`. Claude then runs the same methodology
+  (staged flow, Gates 1–3, never-invent-data rule, sheet architecture, colour/formula
+  discipline, review checklist — see the SPECIFICATIONS section in that file) directly
+  from the uploaded PDFs. Both paths honour the same non-negotiable: never invent data.
+
 ## Installation
 
 ```bash
